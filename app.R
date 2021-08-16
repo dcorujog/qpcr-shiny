@@ -30,7 +30,10 @@ ui <- fluidPage(
       actionButton("run_button", "Run analysis"),
       
       # Download button ----
-      downloadButton("download_data", "Download results")),
+      downloadButton("download_data", "Download results"),
+    
+      # Download button for QC plots ----
+      downloadButton("download_qc", "Download QC plots")),
     
       # Main panel ----
       # Tabset with Results table, QC plots and (to-do) plot of the results
@@ -89,6 +92,15 @@ server <- function(input, output) {
         write.csv(output_data$norm_data, file, row.names = FALSE)
       }
     )
+    
+    # Download handler for QC plots ----
+    output$download_qc <- downloadHandler(
+      filename = function() { 
+        paste(input$exp_name, '_QC.pdf', sep='') 
+        },
+      content = function(file) {
+        ggsave(file, plot = output_data$hkg_scatter)
+      })
   })
 }
 
