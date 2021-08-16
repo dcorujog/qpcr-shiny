@@ -196,14 +196,16 @@ ct_sd_plot <- function(norm_data, max_sd = sd(c(0, 0.5)), max_ct = 35, exp_name 
   ctsd <- ggplot(norm_data, aes(x = ctaverage, y = ct_sd, color = primers, fill = primers)) +
     geom_point(alpha = 0.8) +
     geom_hline(yintercept = max_sd, color = "red") +
-    geom_vline(xintercept = max_ct, color = "red")
+    geom_vline(xintercept = max_ct, color = "red") +
+    scale_color_viridis(option = "turbo", discrete = TRUE)
   return(ctsd)
 }
 
 ct_avg_plot <- function(norm_data, max_ct = 35) {
   ctavg <- ggplot(norm_data, aes(x = primers, y = ctaverage, color = primers, group = primers, size = ct_sd)) +
     geom_jitter(width = 0.2, alpha = 0.75) +
-    geom_hline(yintercept = max_ct, color = "red")
+    geom_hline(yintercept = max_ct, color = "red") +
+    scale_color_viridis(option = "turbo", discrete = TRUE)
   return(ctavg)
 }
 
@@ -211,6 +213,6 @@ eff_avg_plot <- function(norm_data, effrange = c(1.8, 2)) {
   effavg <- ggplot(norm_data, aes(x = primers, y = effaverage, color = ctaverage, group = primers)) +
     geom_jitter(width = 0.2, alpha = 0.75) +
     geom_hline(yintercept = effrange, color = "red") +
-    scale_color_viridis()
+    scale_color_viridis(option = "turbo")
 }
 
