@@ -47,7 +47,9 @@ ui <- fluidPage(
       )
 )
 plotOutput("hkg_scatter", width = 300, height = 300)
+
 #### SERVER ####
+
 server <- function(input, output) {
   
   # Save input file as a data frame ----
@@ -79,7 +81,7 @@ server <- function(input, output) {
     output$ct_avg_qc <- renderPlot(output_data$ct_avg_qc)
     output$eff_avg_qc <- renderPlot(output_data$eff_avg_qc)
     
-    # Download handler for output data
+    # Download handler for output data ----
     output$download_data <- downloadHandler(filename = function() {
         paste(input$exp_name, "_norm_data.csv", sep = "")
       },
