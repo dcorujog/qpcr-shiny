@@ -84,6 +84,25 @@ server <- function(input, output) {
     output$ct_avg_qc <- renderPlot(output_data$ct_avg_qc)
     output$eff_avg_qc <- renderPlot(output_data$eff_avg_qc)
     
+    # Save QC plots as PDF ----
+    ggsave("hkg_scatter.pdf", plot = output_data$hkg_scatter)
+    ggsave("ct_sd.pdf", plot = output_data$ct_sd_qc)
+    ggsave("ct_avg.pdf", plot = output_data$ct_avg)
+    ggsave("eff_avg.pdf", plot = output_data$eff_avg)
+    qc_pdfs <- c("hkg_scatter.pdf", "ct_sd.pdf", "ct_avg.pdf", "eff_avg.pdf")
+    
+    # Download handler for QC plots ----
+    output$download_qc <- downloadHandler(
+      filename = function() { 
+        paste(input$exp_name, '_qc_plots.zip', sep='') 
+      },
+      content = function(file) {
+        zip(zipfile = file,
+            files = qc_pdfs)
+      },
+      contentType = "application/zip"
+      )
+    
     # Download handler for output data ----
     output$download_data <- downloadHandler(filename = function() {
         paste(input$exp_name, "_norm_data.csv", sep = "")
@@ -93,14 +112,6 @@ server <- function(input, output) {
       }
     )
     
-    # Download handler for QC plots ----
-    output$download_qc <- downloadHandler(
-      filename = function() { 
-        paste(input$exp_name, '_QC.pdf', sep='') 
-        },
-      content = function(file) {
-        ggsave(file, plot = output_data$hkg_scatter)
-      })
   })
 }
 
