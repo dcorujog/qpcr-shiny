@@ -79,6 +79,7 @@ server <- function(input, output) {
   # Plots and download handler also depend on the run button
   observeEvent(input$run_button, {
     output_data <- qpcr_analysis(ct_data = input_data(),
+                                 design_table = design_table(),
                                  calibsample = input$calibsample,
                                  hkg = unlist(strsplit(input$hkg, ",")),
                                  exp_name = input$exp_name,
