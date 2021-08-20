@@ -65,6 +65,13 @@ server <- function(input, output) {
     return(read.delim(input_file$datapath))
     })
   
+  # Save design table as data frame ----
+  design_table <- reactive({
+    req(input$input_design)
+    design_table <- input$input_design
+    return(read.delim(input_design$datapath))
+  })
+  
   # Render input file as table ----
   output$input_file <- renderTable(input_data())
   
