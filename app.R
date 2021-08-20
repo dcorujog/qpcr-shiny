@@ -18,6 +18,9 @@ ui <- fluidPage(
       # Input file ----
       fileInput("input_file", label = "Upload data", buttonLabel = "Choose file"),
       
+      # Input design ----
+      fileInput("input_design", label = "Upload design", buttonLabel = "Choose file"),
+      
       # qPCR function arguments ----
       textInput("exp_name", "Experiment name", "my_experiment"),
       textInput("calibsample", "Reference sample"),
