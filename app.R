@@ -18,6 +18,9 @@ ui <- fluidPage(
       # Input file ----
       fileInput("input_file", label = "Upload data", buttonLabel = "Choose file"),
       
+      # Input design ----
+      fileInput("input_design", label = "Upload design", buttonLabel = "Choose file"),
+      
       # qPCR function arguments ----
       textInput("exp_name", "Experiment name", "my_experiment"),
       textInput("calibsample", "Reference sample"),
@@ -62,6 +65,13 @@ server <- function(input, output) {
     return(read.delim(input_file$datapath))
     })
   
+  # Save design table as data frame ----
+  design_table <- reactive({
+    req(input$input_design)
+    design_file <- input$input_design
+    return(read.delim(design_file$datapath))
+    })
+  
   # Render input file as table ----
   output$input_file <- renderTable(input_data())
   
@@ -69,6 +79,7 @@ server <- function(input, output) {
   # Plots and download handler also depend on the run button
   observeEvent(input$run_button, {
     output_data <- qpcr_analysis(ct_data = input_data(),
+                                 design_table = design_table(),
                                  calibsample = input$calibsample,
                                  hkg = unlist(strsplit(input$hkg, ",")),
                                  exp_name = input$exp_name,

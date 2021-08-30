@@ -7,11 +7,13 @@ library(viridis)
 
 qpcr_analysis <- function( # MAIN FUNCTION
   ct_data, # Data frame, expected columns: names, cq, efficiency, primers, included
+  design_table, # Data frame, at least one column called "sample" that matches sample names, any number of extra colums describing the experimental design
   calibsample, # String, name of the reference sample for dct calculation, will be 1 for all genes and the rest of the samples will be relative to it
   hkg, # Character vector with the "housekeeping" genes for normalization
   exp_name, # String, experiment name, will be used for naming saved files
   fix_names = FALSE, # Logical, fix names from chainy output if TRUE
-  exclude = FALSE # Logical, exclude samples with included = FALSE
+  exclude = FALSE, # Logical, exclude samples with included = FALSE
+  group_design = TRUE # Logical, create a new "group" column in the design matrix with the combination of all other factors
 ) {
   
   # Fix names if ncessary (chainy output), otherwise keep as is
@@ -51,6 +53,13 @@ qpcr_analysis <- function( # MAIN FUNCTION
     
   norm_dct <- apply(dct_data, 1, function(x) as.numeric(x["dct"]) / normalization$norm_factor[as.character(x["sample"])])
   norm_data <- cbind(dct_data, "norm_dct" = norm_dct)
+  
+  if (group_design) {
+    design_sub <- design_table[, !(names(design_table) %in% "sample")]
+    design_table$group <- apply(design_sub, 1, function(x) {paste(x, collapse = "_")})
+  }
+  
+  norm_data <- merge(norm_data, design_table, by = "sample", all.x = TRUE, all.y = FALSE, sort = FALSE)
   
   # QC plots
   ct_sd_qc <- ct_sd_plot(norm_data)
