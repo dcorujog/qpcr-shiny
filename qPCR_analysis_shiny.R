@@ -223,5 +223,6 @@ eff_avg_plot <- function(norm_data, effrange = c(1.8, 2)) {
     geom_jitter(width = 0.2, alpha = 0.75) +
     geom_hline(yintercept = effrange, color = "red") +
     scale_color_viridis(option = "turbo")
+  return(effavg)
 }
 
