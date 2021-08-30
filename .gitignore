@@ -51,4 +51,7 @@ Thumbs.db
 *.mov
 *.wmv
 
+# RStudio files
 .Rproj.user
+.RData
+.Rhistory
